@@ -1,3 +1,5 @@
+# https://gist.github.com/mailletf/c49063d005dfc51a2df6#file-gistfile1-py
+
 import pyaudio
 #import librosa
 import numpy as np
@@ -6,6 +8,7 @@ from time import sleep
 
 pa = pyaudio.PyAudio()
 
+CHUNK = 1024
 CHANNELS = 2
 RATE = 44100
 
@@ -14,12 +17,15 @@ RATE = 44100
 
 
 def callback(in_data, frame_count, time_info, flag):
-    # audio_data = np.fromstring(in_data, dtype=np.float32)
+    """
+    :param in_data: audio data from input source
+    :param frame_count: 1024
+    :param time_info: {'input_buffer_adc_time': ..., 'current_time': ..., 'output_buffer_dac_time': ...}
+    :param flag: 0 or 1
+    """
+    audio_data = np.fromstring(in_data, dtype=np.float32)
 
-    # we trained on audio with a sample rate of 22050 so we need to convert it
-    # audio_data = librosa.resample(audio_data, 44100, 22050)
     # ringBuffer.extend(audio_data)
-
     # process data array using librosa
     # ...
 
@@ -35,7 +41,8 @@ stream = pa.open(format=pyaudio.paFloat32,
                  rate=RATE,
                  output=True,
                  input=True,
-                 stream_callback=callback)
+                 stream_callback=callback,
+                 frames_per_buffer=CHUNK)
 
 # start the stream
 stream.start_stream()
