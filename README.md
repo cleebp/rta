@@ -9,13 +9,13 @@ Playing around with on-board sound capture, analysis, and routing in python.
 
 
 ## Setup
-On mac with homebrew installed:
+**On mac with homebrew installed:**
 - `brew install portaudio`
 - `python3 -m venv venv`
 - `source venv/bin/activate`
 - `pip install -r requirements.txt`
 
-Next install iShowU Audio Capture and setup a virtual audio route:
+**Next install iShowU Audio Capture and setup a virtual audio route:**
 - Follow the install instructions from the latest [release](https://support.shinywhitebox.com/hc/en-us/articles/204161459-Installing-iShowU-Audio-Capture)
   - Be sure to allow the developer in your security preferences in the last step, this is a second allow after entering your password in the `.pkg` install
 - Open the native mac app `Audio MIDI Setup`

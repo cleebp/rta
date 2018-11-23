@@ -29,11 +29,11 @@ def callback(in_data, frame_count, time_info, flag):
     y = np.fromstring(in_data, dtype=np.float32)
     print('Audio data:', y)
 
-    onset_env = onset_strength(y=y, sr=RATE)
+    # onset_env = onset_strength(y=y, sr=RATE)
     # tempo = librosa.beat.tempo(onset_envelope=onset_env, sr=RATE)
     # dtempo = librosa.beat.tempo(onset_envelope=onset_env, sr=sr, aggregate=None)
 
-    print('Onset strength:', onset_env)
+    # print('Onset strength:', onset_env)
     # print('Tempo:', tempo)
     # print('DTempo:', dtempo)
 
