@@ -1,11 +1,11 @@
-# py-animate
-playing around with animations and simulations in python
+# Real-time analysis
+Playing around with on-board sound capture, analysis, and routing in python.
 
 ## Requirements
 - Mac osx
 - Homebrew
 - Python `>=3.6`
-- Soundflower (see below)
+- iShowU Audio Capture (see below)
 
 
 ## Setup

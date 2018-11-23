@@ -1,5 +1,3 @@
-animatplot
-pycairo
 librosa
-pyaudio
 numpy
+pyaudio
