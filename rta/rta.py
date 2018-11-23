@@ -1,7 +1,10 @@
 # https://gist.github.com/mailletf/c49063d005dfc51a2df6#file-gistfile1-py
+# soundflower tutorial: https://apple.stackexchange.com/questions/221980/os-x-route-audio-output-to-audio-input
+# soundflower: https://github.com/mattingalls/Soundflower
 
 import pyaudio
-#import librosa
+from librosa import resample
+from librosa.onset import onset_strength
 import numpy as np
 from time import sleep
 
@@ -23,7 +26,16 @@ def callback(in_data, frame_count, time_info, flag):
     :param time_info: {'input_buffer_adc_time': ..., 'current_time': ..., 'output_buffer_dac_time': ...}
     :param flag: 0 or 1
     """
-    audio_data = np.fromstring(in_data, dtype=np.float32)
+    y = np.fromstring(in_data, dtype=np.float32)
+    print('Audio data:', y)
+
+    # onset_env = onset_strength(y)
+    # tempo = librosa.beat.tempo(onset_envelope=onset_env, sr=RATE)
+    # dtempo = librosa.beat.tempo(onset_envelope=onset_env, sr=sr, aggregate=None)
+
+    # print('Onset strength:', onset_env)
+    # print('Tempo:', tempo)
+    # print('DTempo:', dtempo)
 
     # ringBuffer.extend(audio_data)
     # process data array using librosa
@@ -39,16 +51,17 @@ def callback(in_data, frame_count, time_info, flag):
 stream = pa.open(format=pyaudio.paFloat32,
                  channels=CHANNELS,
                  rate=RATE,
-                 output=True,
+                 output=False,
                  input=True,
                  stream_callback=callback,
+                 input_device_index=4,
                  frames_per_buffer=CHUNK)
 
 # start the stream
 stream.start_stream()
 
 while stream.is_active():
-    sleep(0.1)
+    sleep(0.25)
 
 stream.close()
 pa.terminate()
