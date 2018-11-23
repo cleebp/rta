@@ -13,7 +13,7 @@ pa = pyaudio.PyAudio()
 
 CHUNK = 1024
 CHANNELS = 2
-RATE = 44100
+RATE = 96000
 
 # ring buffer will keep the last 2 seconds worth of audio
 # ringBuffer = RingBuffer(2 * 22050)
@@ -29,11 +29,11 @@ def callback(in_data, frame_count, time_info, flag):
     y = np.fromstring(in_data, dtype=np.float32)
     print('Audio data:', y)
 
-    # onset_env = onset_strength(y)
+    onset_env = onset_strength(y=y, sr=RATE)
     # tempo = librosa.beat.tempo(onset_envelope=onset_env, sr=RATE)
     # dtempo = librosa.beat.tempo(onset_envelope=onset_env, sr=sr, aggregate=None)
 
-    # print('Onset strength:', onset_env)
+    print('Onset strength:', onset_env)
     # print('Tempo:', tempo)
     # print('DTempo:', dtempo)
 
@@ -44,17 +44,13 @@ def callback(in_data, frame_count, time_info, flag):
     return in_data, pyaudio.paContinue
 
 
-# function that finds the index of the Soundflower
-# input device and HDMI output device
-# dev_indexes = findAudioDevices()
-
 stream = pa.open(format=pyaudio.paFloat32,
                  channels=CHANNELS,
                  rate=RATE,
                  output=False,
                  input=True,
                  stream_callback=callback,
-                 input_device_index=4,
+                 input_device_index=2,
                  frames_per_buffer=CHUNK)
 
 # start the stream
