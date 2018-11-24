@@ -53,19 +53,20 @@ class Analyser:
         spectrum_length = int(len(spectrum))
         chunk_size = int(ceil(spectrum_length / SCREEN_WIDTH))
         # lower right = (0, SCREEN_HEIGHT)
+        normal = 0 if spectrum.max() == 0 else SCREEN_HEIGHT/spectrum.max()
         index = -1
         for i in range(0, spectrum_length, chunk_size):
             index += 1
-            chunk_arrays = [spectrum[i]]
+            chunk_arrays = [spectrum[i]*normal]
             for j in range(i + 1, i + chunk_size):
                 if j == spectrum_length:
                     break
-                chunk_arrays.append(spectrum[j])
+                chunk_arrays.append(spectrum[j]*normal)
             mean_array = np.mean(chunk_arrays, axis=0)
             # print('Mean slice:', mean_array)
 
             x = index
-            y = SCREEN_HEIGHT - int(mean_array * 10e7)
+            y = SCREEN_HEIGHT - int(mean_array)
             width = 1
             height = SCREEN_HEIGHT
             draw.rect(self.screen, GREEN, (x, y, width, height), 0)
