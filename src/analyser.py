@@ -4,9 +4,10 @@ Based on Anna Wszeborowska's implementation here: https://github.com/aniawsz/rtm
 """
 import itertools
 from collections import deque
+from math import ceil
 
 import numpy as np
-from pygame import display, surfarray
+from pygame import display, draw, surfarray
 
 from config import *
 
@@ -15,7 +16,7 @@ class Analyser:
     FREQUENCY_RANGE = (500, 1200)
 
     def __init__(self, screen, window_size=None, segments_buf=None):
-        self.screen_array = np.zeros((SCREEN_SIZE, SCREEN_SIZE))
+        self.screen_array = np.zeros((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.screen = screen
 
         if window_size is None:
@@ -46,6 +47,36 @@ class Analyser:
             self._last_flux,
             self._segments_buf - self._thresholding_window_size,
             self._segments_buf))
+
+    def _draw_spectrum(self, spectrum):
+        # print('Spectrum:', spectrum)
+        spectrum_length = int(len(spectrum))
+        chunk_size = int(ceil(spectrum_length / SCREEN_WIDTH))
+        # lower right = (0, SCREEN_HEIGHT)
+        index = -1
+        for i in range(0, spectrum_length, chunk_size):
+            index += 1
+            chunk_arrays = [spectrum[i]]
+            for j in range(i + 1, i + chunk_size):
+                if j == spectrum_length:
+                    break
+                chunk_arrays.append(spectrum[j])
+            mean_array = np.mean(chunk_arrays, axis=0)
+            # print('Mean slice:', mean_array)
+
+            x = index
+            y = SCREEN_HEIGHT - int(mean_array * 10e7)
+            width = 1
+            height = SCREEN_HEIGHT
+            draw.rect(self.screen, GREEN, (x, y, width, height), 0)
+
+            # self.screen_array.fill(mean_array*10e10)
+            # surfarray.blit_array(self.screen, self.screen_array)
+            # display.flip()
+
+        # screen.blit(surf, (0,0))
+        # pygame.display.flip()
+        display.update()
 
     def find_onset(self, spectrum):
         """
@@ -84,14 +115,7 @@ class Analyser:
 
     def process_data(self, data):
         spectrum = self.autopower_spectrum(data)
-        print('Spectrum:', spectrum)
-        for i in range(len(spectrum)):
-            self.screen_array.fill(i)
-            surfarray.blit_array(self.screen, self.screen_array)
-            display.flip()
-
-        # screen.blit(surf, (0,0))
-        # pygame.display.flip()
+        self._draw_spectrum(spectrum)
 
         onset = self.find_onset(spectrum)
         self._last_spectrum = spectrum

@@ -23,6 +23,7 @@ class Stream:
         self._analyser = Analyser(window_size=WINDOW_SIZE, segments_buf=RING_BUFFER_SIZE,
                                   screen=screen)
         self.last_time = start_time
+        self.screen = screen
 
     def run(self):
         pa = PyAudio()
@@ -40,7 +41,7 @@ class Stream:
         self.stream.start_stream()
 
         while self.stream.is_active():
-            self._fps()
+            # self._fps()
             sleep(0.24)
 
         self.stream.stop_stream()
@@ -62,6 +63,7 @@ class Stream:
             pygame.display.flip()'''
 
         # print('Audio data:', y)
+        self.screen.fill(BLACK)
         freq = self._analyser.process_data(y)
         if freq:
             # onset
@@ -78,7 +80,7 @@ class Stream:
 
 if __name__ == '__main__':
     pygame.init()
-    window = pygame.display.set_mode((SCREEN_SIZE, SCREEN_SIZE), pygame.DOUBLEBUF)
+    window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.DOUBLEBUF)
     screen = pygame.display.get_surface()
     stream = Stream(screen=screen, start_time=time())
     stream.run()
