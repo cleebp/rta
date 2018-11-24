@@ -15,3 +15,6 @@ FRAMES_PER_BUFFER = 4096
 CHANNELS = 2
 CHUNK = 1024  # number of frames the signals are split into
 SAMPLE_RATE = 96000  # number of frames per second
+
+# pygame
+SCREEN_SIZE = 300

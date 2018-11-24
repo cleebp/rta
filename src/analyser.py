@@ -6,6 +6,7 @@ import itertools
 from collections import deque
 
 import numpy as np
+from pygame import display, surfarray
 
 from config import *
 
@@ -13,7 +14,10 @@ from config import *
 class Analyser:
     FREQUENCY_RANGE = (500, 1200)
 
-    def __init__(self, window_size=None, segments_buf=None):
+    def __init__(self, screen, window_size=None, segments_buf=None):
+        self.screen_array = np.zeros((SCREEN_SIZE, SCREEN_SIZE))
+        self.screen = screen
+
         if window_size is None:
             window_size = WINDOW_SIZE
         self._window_size = window_size
@@ -50,7 +54,7 @@ class Analyser:
         """
         last_spectrum = self._last_spectrum
         flux = sum([max(spectrum[n] - last_spectrum[n], 0)
-                    for n in np.xrange(self._window_size)])
+                    for n in range(self._window_size)])
         self._last_flux.append(flux)
 
         thresholded = np.mean(
@@ -81,6 +85,13 @@ class Analyser:
     def process_data(self, data):
         spectrum = self.autopower_spectrum(data)
         print('Spectrum:', spectrum)
+        for i in range(len(spectrum)):
+            self.screen_array.fill(i)
+            surfarray.blit_array(self.screen, self.screen_array)
+            display.flip()
+
+        # screen.blit(surf, (0,0))
+        # pygame.display.flip()
 
         onset = self.find_onset(spectrum)
         self._last_spectrum = spectrum

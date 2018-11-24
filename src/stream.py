@@ -2,7 +2,9 @@
 
 On board audio routing, analysis, and pass-through.
 """
-from time import sleep
+import pygame
+import random
+from time import sleep, time
 
 from librosa import beat
 from librosa.onset import onset_strength
@@ -17,8 +19,10 @@ class Stream:
 
     stream = Stream
 
-    def __init__(self):
-        self._analyser = Analyser(window_size=WINDOW_SIZE, segments_buf=RING_BUFFER_SIZE)
+    def __init__(self, screen, start_time):
+        self._analyser = Analyser(window_size=WINDOW_SIZE, segments_buf=RING_BUFFER_SIZE,
+                                  screen=screen)
+        self.last_time = start_time
 
     def run(self):
         pa = PyAudio()
@@ -30,13 +34,14 @@ class Stream:
                               input=True,
                               stream_callback=self.callback,
                               input_device_index=2,
-                              frames_per_buffer=WINDOW_SIZE)
+                              frames_per_buffer=CHUNK)
 
         # start the stream
         self.stream.start_stream()
 
         while self.stream.is_active():
-            sleep(0.1)
+            self._fps()
+            sleep(0.24)
 
         self.stream.stop_stream()
         self.stream.close()
@@ -50,6 +55,12 @@ class Stream:
         :param flag: 0 or 1
         """
         y = np.fromstring(in_data, dtype=np.float32)
+
+        '''for i in range(len(y)):
+            self.screen_array.fill(i)
+            pygame.surfarray.blit_array(self.screen, self.screen_array)
+            pygame.display.flip()'''
+
         # print('Audio data:', y)
         freq = self._analyser.process_data(y)
         if freq:
@@ -58,9 +69,18 @@ class Stream:
 
         return in_data, paContinue
 
+    def _fps(self):
+        t2 = time()
+        time_delta = (t2 - self.last_time) * 100
+        self.last_time = t2
+        print('FPS:', time_delta)
+
 
 if __name__ == '__main__':
-    stream = Stream()
+    pygame.init()
+    window = pygame.display.set_mode((SCREEN_SIZE, SCREEN_SIZE), pygame.DOUBLEBUF)
+    screen = pygame.display.get_surface()
+    stream = Stream(screen=screen, start_time=time())
     stream.run()
 
 def _shitty_librosa_code_that_doesnt_work(in_data):
