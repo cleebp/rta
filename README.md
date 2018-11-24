@@ -27,3 +27,9 @@ Playing around with on-board sound capture, analysis, and routing in python.
   - Your final master device should be built-in output
   - Optionally rename the new virtual audio route to something recognizable like `loopback`
   
+## To Run
+`cd rta/src`
+
+`python stream.py`
+
+Play some music ^.^
