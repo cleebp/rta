@@ -5,6 +5,7 @@ On board audio routing, analysis, and pass-through.
 import pygame
 import random
 from time import sleep, time
+from sys import exit
 
 from librosa import beat
 from librosa.onset import onset_strength
@@ -20,10 +21,11 @@ class Stream:
     stream = Stream
 
     def __init__(self, screen, start_time):
-        self._analyser = Analyser(window_size=WINDOW_SIZE, segments_buf=RING_BUFFER_SIZE,
-                                  screen=screen)
-        self.last_time = start_time
         self.screen = screen
+        self.clock = pygame.time.Clock()
+        self._analyser = Analyser(self.screen, self.clock, window_size=WINDOW_SIZE,
+                                  segments_buf=RING_BUFFER_SIZE)
+        self.last_time = start_time
 
     def run(self):
         pa = PyAudio()
@@ -40,9 +42,16 @@ class Stream:
         # start the stream
         self.stream.start_stream()
 
-        while self.stream.is_active():
+        pyquit = False
+        while self.stream.is_active() and not pyquit:
             # self._fps()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    pyquit = True
+
             sleep(0.24)
+            # self.clock.tick(30)
 
         self.stream.stop_stream()
         self.stream.close()
@@ -57,13 +66,7 @@ class Stream:
         """
         y = np.fromstring(in_data, dtype=np.float32)
 
-        '''for i in range(len(y)):
-            self.screen_array.fill(i)
-            pygame.surfarray.blit_array(self.screen, self.screen_array)
-            pygame.display.flip()'''
-
         # print('Audio data:', y)
-        self.screen.fill(BLACK)
         freq = self._analyser.process_data(y)
         if freq:
             # onset

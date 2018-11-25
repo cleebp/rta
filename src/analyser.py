@@ -7,7 +7,7 @@ from collections import deque
 from math import ceil
 
 import numpy as np
-from pygame import display, draw, surfarray
+import pygame
 
 from config import *
 
@@ -15,9 +15,11 @@ from config import *
 class Analyser:
     FREQUENCY_RANGE = (500, 1200)
 
-    def __init__(self, screen, window_size=None, segments_buf=None):
+    def __init__(self, screen, clock, window_size=None, segments_buf=None):
         self.screen_array = np.zeros((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.screen = screen
+        self.font = pygame.font.Font(None, 30)
+        self.clock = clock
 
         if window_size is None:
             window_size = WINDOW_SIZE
@@ -69,15 +71,17 @@ class Analyser:
             y = SCREEN_HEIGHT - int(mean_array)
             width = 1
             height = SCREEN_HEIGHT
-            draw.rect(self.screen, GREEN, (x, y, width, height), 0)
+            pygame.draw.rect(self.screen, GREEN, (x, y, width, height), 0)
 
-            # self.screen_array.fill(mean_array*10e10)
-            # surfarray.blit_array(self.screen, self.screen_array)
-            # display.flip()
+        self.update()
 
-        # screen.blit(surf, (0,0))
-        # pygame.display.flip()
-        display.update()
+    def update(self):
+        fps = self.font.render(str(int(self.clock.get_fps())), True, WHITE)
+        self.screen.blit(fps, (SCREEN_WIDTH - 50, 50))
+
+        pygame.display.update()
+
+        self.screen.fill(BLACK)
 
     def find_onset(self, spectrum):
         """
@@ -115,8 +119,10 @@ class Analyser:
         return freq0
 
     def process_data(self, data):
-        spectrum = self.autopower_spectrum(data)
-        self._draw_spectrum(spectrum)
+        self._draw_spectrum(data)
+
+        '''spectrum = self.autopower_spectrum(data)
+        # self._draw_spectrum(spectrum)
 
         onset = self.find_onset(spectrum)
         self._last_spectrum = spectrum
@@ -127,7 +133,7 @@ class Analyser:
 
         if onset:
             freq = self.find_fundamental_freq(data)
-            return freq
+            return freq'''
 
     def autopower_spectrum(self, samples):
         """
