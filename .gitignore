@@ -3,6 +3,8 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+
+tmp.py
 # Distribution / packaging
 .Python
 env/
