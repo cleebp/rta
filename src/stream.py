@@ -2,15 +2,13 @@
 
 On board audio routing, analysis, and pass-through.
 """
-import pygame
-import random
 from time import sleep, time
-from sys import exit
 
 from librosa import beat
 from librosa.onset import onset_strength
 import numpy as np
 from pyaudio import PyAudio, paContinue, paFloat32, Stream
+import pygame
 
 from config import *
 from analyser import Analyser
@@ -20,12 +18,11 @@ class Stream:
 
     stream = Stream
 
-    def __init__(self, screen, start_time):
+    def __init__(self, screen, clock):
         self.screen = screen
-        self.clock = pygame.time.Clock()
-        self._analyser = Analyser(self.screen, self.clock, window_size=WINDOW_SIZE,
+        self._analyser = Analyser(self.screen, clock, window_size=WINDOW_SIZE,
                                   segments_buf=RING_BUFFER_SIZE)
-        self.last_time = start_time
+        # self.last_time = start_time
 
     def run(self):
         pa = PyAudio()
@@ -45,17 +42,16 @@ class Stream:
         pyquit = False
         while self.stream.is_active() and not pyquit:
             # self._fps()
+            sleep(0.24)
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    pygame.quit()
                     pyquit = True
-
-            sleep(0.24)
-            # self.clock.tick(30)
 
         self.stream.stop_stream()
         self.stream.close()
         pa.terminate()
+        pygame.quit()
 
     def callback(self, in_data, frame_count, time_info, flag):
         """
@@ -85,8 +81,11 @@ if __name__ == '__main__':
     pygame.init()
     window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.DOUBLEBUF)
     screen = pygame.display.get_surface()
-    stream = Stream(screen=screen, start_time=time())
+    clock = pygame.time.Clock()
+    stream = Stream(screen=screen, clock=clock)
+
     stream.run()
+
 
 def _shitty_librosa_code_that_doesnt_work(in_data):
     onset_env = onset_strength(y=in_data, sr=SAMPLE_RATE)
