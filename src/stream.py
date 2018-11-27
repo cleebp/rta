@@ -36,14 +36,11 @@ class Stream:
                               input_device_index=2,
                               frames_per_buffer=CHUNK)
 
-        # start the stream
         self.stream.start_stream()
 
         pyquit = False
         while self.stream.is_active() and not pyquit:
-            # self._fps()
             sleep(0.24)
-
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pyquit = True
