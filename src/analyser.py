@@ -22,7 +22,6 @@ class Analyser:
         spectrum_length = int(len(spectrum))
         chunk_size = int(spectrum_length / SCREEN_WIDTH)
         normal = 0 if spectrum.max() == 0 else SCREEN_HEIGHT/spectrum.max()
-
         index = -1
         for i in range(0, spectrum_length, chunk_size):
             index += 1
