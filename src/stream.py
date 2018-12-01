@@ -36,10 +36,10 @@ class Stream:
 
         pyquit = False
         while self.stream.is_active() and not pyquit:
-            sleep(0.24)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pyquit = True
+            sleep(0.24)
 
         self.stream.stop_stream()
         self.stream.close()
@@ -62,7 +62,7 @@ class Stream:
 
 if __name__ == '__main__':
     pygame.init()
-    pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))  # , pygame.DOUBLEBUF)
+    pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.DOUBLEBUF)
     pygame.display.set_caption('rta - rip winamp')
     stream = Stream(screen=pygame.display.get_surface(), clock=pygame.time.Clock())
 
