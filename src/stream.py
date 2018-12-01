@@ -58,9 +58,10 @@ class Stream:
         :param flag: 0 or 1
         """
         y = np.fromstring(in_data, dtype=np.float32)
+        spectrum = np.nan_to_num(np.log(y))
 
         # print('Audio data:', y)
-        freq = self._analyser.process_data(y)
+        freq = self._analyser.process_data(spectrum)
         if freq:
             # onset
             print("Onset detected; fundamental frequency:", freq)
@@ -77,6 +78,7 @@ class Stream:
 if __name__ == '__main__':
     pygame.init()
     window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.DOUBLEBUF)
+    pygame.display.set_caption('rta - rip winamp')
     screen = pygame.display.get_surface()
     clock = pygame.time.Clock()
     stream = Stream(screen=screen, clock=clock)
