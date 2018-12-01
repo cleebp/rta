@@ -29,7 +29,7 @@ class Stream:
                               output=False,
                               input=True,
                               stream_callback=self.callback,
-                              input_device_index=2,
+                              input_device_index=INPUT_DEVICE_INDEX,
                               frames_per_buffer=CHUNK)
 
         self.stream.start_stream()
