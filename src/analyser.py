@@ -6,6 +6,7 @@ PyGame drawing reference:
 - (SCREEN_WIDTH, 0) Upper Right
 - (SCREEN_WIDTH, SCREEN_HEIGHT) Lower Right
 """
+from colorsys import hsv_to_rgb
 
 import numpy as np
 import pygame
@@ -17,12 +18,24 @@ class Analyser:
     FREQUENCY_RANGE = (500, 1200)
 
     def __init__(self, screen, clock):
-        self.screen_array = np.zeros((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.screen = screen
         self.font = pygame.font.Font(None, 30)
         self.clock = clock
+        self.hue = 0
+
+    def process_data(self, data):
+        self._draw_spectrum(data)
+
+    def update(self):
+        self.clock.tick(24)
+        fps = self.font.render(str(int(self.clock.get_fps())), True, WHITE)
+        self.screen.blit(fps, (SCREEN_WIDTH - 50, 25))
+
+        pygame.display.flip()
 
     def _draw_spectrum(self, spectrum):
+        self.screen.fill(BLACK)
+
         spectrum_length = int(len(spectrum))
         chunk_size = int(spectrum_length / SCREEN_WIDTH)
         amp_step = SCREEN_HEIGHT/20
@@ -45,20 +58,17 @@ class Analyser:
                 y = SCREEN_HEIGHT / 2
                 height = 0
 
-            x = index
-            width = 1
-            pygame.draw.rect(self.screen, RED, (x, y, width, height), 0)
+            color = self._hsv2rgb(self.hue, 1, 1)
+            pygame.draw.rect(self.screen, color, (index, y, 1, height), 0)
 
+        self._bump_hue(0.001)
         self.update()
 
-    def update(self):
-        fps = self.font.render(str(int(self.clock.get_fps())), True, WHITE)
-        self.screen.blit(fps, (SCREEN_WIDTH - 50, 25))
+    def _bump_hue(self, factor):
+        self.hue += factor
+        if self.hue == 1:
+            self.hue = 0
 
-        pygame.display.flip()
-
-        self.clock.tick(24)
-        self.screen.fill(BLACK)
-
-    def process_data(self, data):
-        self._draw_spectrum(data)
+    @staticmethod
+    def _hsv2rgb(hue, sat, val):
+        return tuple(round(i * 255) for i in hsv_to_rgb(hue, sat, val))
