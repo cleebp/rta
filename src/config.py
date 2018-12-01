@@ -14,6 +14,7 @@ FRAMES_PER_BUFFER = 4096
 # changed
 CHANNELS = 2
 CHUNK = 1024  # number of frames the signals are split into
+INPUT_DEVICE_INDEX = 2
 SAMPLE_RATE = 96000  # number of frames per second
 
 # pygame

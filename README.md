@@ -26,7 +26,9 @@ Playing around with on-board sound capture, analysis, and routing in python.
   - Make sure both sources are at the same sample rate by switching the master device, this script assumes `96.0 kHz`
   - Your final master device should be built-in output
   - Optionally rename the new virtual audio route to something recognizable like `loopback`
-  
+- After your iShowU loopback is created set the `INPUT_DEVICE_INDEX` in `config.py`
+  - Run `python helpers.py` to list your device indexes
+
 ## To Run
 `cd rta/src`
 
