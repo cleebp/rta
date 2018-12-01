@@ -18,25 +18,32 @@ class Analyser:
         self.clock = clock
 
     def _draw_spectrum(self, spectrum):
-        # lower right = (0, SCREEN_HEIGHT)
+        # lower left = (0, SCREEN_HEIGHT)
         spectrum_length = int(len(spectrum))
         chunk_size = int(spectrum_length / SCREEN_WIDTH)
-        normal = 0 if spectrum.max() == 0 else SCREEN_HEIGHT/spectrum.max()
+        # normal = 0 if spectrum.max() == 0 else SCREEN_HEIGHT/spectrum.max()
+        amp_step = SCREEN_HEIGHT/20
         index = -1
         for i in range(0, spectrum_length, chunk_size):
             index += 1
-            chunk_arrays = [spectrum[i]*normal]
+            chunk_arrays = [spectrum[i]] # [spectrum[i]*normal]
             for j in range(i+1, i+chunk_size):
                 if j == spectrum_length:
                     break
-                chunk_arrays.append(spectrum[j]*normal)
+                chunk_arrays.append(spectrum[j])
             mean_array = np.mean(chunk_arrays, axis=0)
 
+            if np.isfinite(mean_array):
+                amp = mean_array * amp_step
+                y = SCREEN_HEIGHT/2 + amp
+                height = amp * -2
+            else:
+                y = SCREEN_HEIGHT / 2
+                height = 0
+
             x = index
-            y = SCREEN_HEIGHT - int(mean_array)
             width = 1
-            height = SCREEN_HEIGHT
-            pygame.draw.rect(self.screen, GREEN, (x, y, width, height), 0)
+            pygame.draw.rect(self.screen, RED, (x, y, width, height), 0)
 
         self.update()
 
