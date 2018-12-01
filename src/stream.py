@@ -54,7 +54,8 @@ class Stream:
         :param flag: 0 or 1
         """
         y = np.fromstring(in_data, dtype=np.float32)
-        spectrum = np.nan_to_num(np.log(y))
+        with np.errstate(all='ignore'):
+            spectrum = np.nan_to_num(np.log(y))
         self._analyser.process_data(spectrum)
 
         return in_data, paContinue

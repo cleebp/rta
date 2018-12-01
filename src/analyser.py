@@ -15,7 +15,6 @@ from config import *
 
 
 class Analyser:
-    FREQUENCY_RANGE = (500, 1200)
 
     def __init__(self, screen, clock):
         self.screen = screen
@@ -48,7 +47,8 @@ class Analyser:
                 if j == spectrum_length:
                     break
                 chunk_arrays.append(spectrum[j])
-            mean_array = np.mean(chunk_arrays)
+            with np.errstate(all='ignore'):
+                mean_array = np.mean(chunk_arrays)
 
             if np.isfinite(mean_array):
                 amp = mean_array * amp_step
