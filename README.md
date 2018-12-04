@@ -1,6 +1,8 @@
 # Real-time analysis
 Playing around with on-board audio capture, analysis, and visualization in python.
 
+![latest gif](https://github.com/cleebp/rta/blob/master/latest.gif)
+
 ## Requirements
 - Mac osx
 - Homebrew
