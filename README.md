@@ -1,5 +1,5 @@
 # Real-time analysis
-Playing around with on-board sound capture, analysis, and routing in python.
+Playing around with on-board audio capture, analysis, and visualization in python.
 
 ## Requirements
 - Mac osx
