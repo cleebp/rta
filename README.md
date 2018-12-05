@@ -37,3 +37,8 @@ Playing around with on-board audio capture, analysis, and visualization in pytho
 `python stream.py`
 
 Play some music ^.^
+
+## Resources
+- [PyGame drawing basics](https://www.cs.ucsb.edu/~pconrad/cs5nm/topics/pygame/drawing/)
+- [PyGame documentation home](https://www.pygame.org/docs/index.html)
+- [Forum thread on PyGame drawing efficiency](http://forums.xkcd.com/viewtopic.php?t=109841)
