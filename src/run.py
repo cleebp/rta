@@ -9,14 +9,13 @@ from pyaudio import PyAudio, paContinue, paFloat32, Stream
 import pygame
 
 from config import *
-from draw.window import Analyser
+from draw.window import Window
 
 
 class Driver:
 
     def __init__(self, screen, clock):
-        self.screen = screen
-        self._analyser = Analyser(self.screen, clock)
+        self.window = Window(screen, clock)
         self.stream = Stream
 
     def run(self):
@@ -55,7 +54,7 @@ class Driver:
         y = np.fromstring(in_data, dtype=np.float32)
         with np.errstate(all='ignore'):
             spectrum = np.nan_to_num(np.log(y))
-        self._analyser.process_data(spectrum)
+        self.window.draw(spectrum)
 
         return in_data, paContinue
 

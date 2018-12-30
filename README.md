@@ -34,7 +34,7 @@ Playing around with on-board audio capture, analysis, and visualization in pytho
 ## To Run
 `cd rta/src`
 
-`python stream.py`
+`python run.py`
 
 Play some music ^.^
 
