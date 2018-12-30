@@ -17,9 +17,9 @@ CHUNK = 1024  # number of frames the signals are split into
 INPUT_DEVICE_INDEX = 2
 SAMPLE_RATE = 96000  # number of frames per second
 
-# pygame
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
+# pygame [mac = 1440x900]
+SCREEN_WIDTH = 1080
+SCREEN_HEIGHT = 675
 
 # colors
 RED = (255, 0, 0)
