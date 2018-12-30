@@ -33,10 +33,10 @@ class Window:
         self._draw_fps()
 
     def _init_canvas(self):
-        canvas_width = self.width*0.75
-        canvas_height = self.height*0.75
-        top_left = ((self.width - canvas_width)/2, (self.height - canvas_height)/2)
-        return Canvas(self.screen, canvas_width, canvas_height, top_left)
+        canvas_width = self.width*0.666  # \m/
+        canvas_height = self.height*0.666  # \m/
+        margin = ((self.width - canvas_width)/2, (self.height - canvas_height)/2)
+        return Canvas(self.screen, canvas_width, canvas_height, margin)
 
     def _draw_fps(self):
         self.clock.tick(24)
