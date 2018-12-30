@@ -1,4 +1,4 @@
-"""stream.py
+"""run.py
 
 On board audio routing, analysis, and pass-through.
 """
@@ -9,16 +9,15 @@ from pyaudio import PyAudio, paContinue, paFloat32, Stream
 import pygame
 
 from config import *
-from analyser import Analyser
+from draw.window import Analyser
 
 
-class Stream:
-
-    stream = Stream
+class Driver:
 
     def __init__(self, screen, clock):
         self.screen = screen
         self._analyser = Analyser(self.screen, clock)
+        self.stream = Stream
 
     def run(self):
         pa = PyAudio()
@@ -65,6 +64,6 @@ if __name__ == '__main__':
     pygame.init()
     pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.DOUBLEBUF)
     pygame.display.set_caption('rta - rip winamp')
-    stream = Stream(screen=pygame.display.get_surface(), clock=pygame.time.Clock())
+    driver = Driver(screen=pygame.display.get_surface(), clock=pygame.time.Clock())
 
-    stream.run()
+    driver.run()

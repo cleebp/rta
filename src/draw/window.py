@@ -1,4 +1,4 @@
-"""analyser.py
+"""window.py
 
 PyGame drawing reference:
 - (0, 0) Upper Left
