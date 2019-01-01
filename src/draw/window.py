@@ -39,7 +39,7 @@ class Window:
         return Canvas(self.screen, canvas_width, canvas_height, margin)
 
     def _draw_fps(self):
-        self.clock.tick(24)
+        self.clock.tick(18)
         fps = self.font.render(str(int(self.clock.get_fps())), True, WHITE)
         self.screen.blit(fps, (self.width - 50, 25))  # 25px down, 50px from right edge
         display.flip()

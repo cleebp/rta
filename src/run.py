@@ -37,7 +37,7 @@ class Driver:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pyquit = True
-            sleep(0.76)  # 24 fps
+            sleep(0.82)  # 18 fps
 
         self.stream.stop_stream()
         self.stream.close()
