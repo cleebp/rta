@@ -18,7 +18,7 @@ class Canvas:
 
         self.offset = 2  # pixels between bars
         self.spectrum_bars = self._init_spectrum_bars()
-        self.amp_step = self.height/20
+        self.amp_step = self.height/15
 
     def update(self, spectrum):
         self._bump_hue(0.001)
