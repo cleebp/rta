@@ -37,6 +37,8 @@ class Driver:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pyquit = True
+                if event.type == pygame.KEYDOWN:
+                    self._process_input(event.key)
             sleep(0.82)  # 18 fps
 
         self.stream.stop_stream()
@@ -57,6 +59,14 @@ class Driver:
         self.window.draw(spectrum)
 
         return in_data, paContinue
+
+    def _process_input(self, key):
+        if key == pygame.K_TAB:
+            print('TAB pressed')
+        if key == pygame.K_c:
+            print('c pressed')
+        if key == pygame.K_f:
+            print('f pressed')
 
 
 if __name__ == '__main__':
